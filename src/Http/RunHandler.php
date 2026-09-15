@@ -7,6 +7,7 @@ namespace rafalmasiarek\DashboardKitScheduler\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use rafalmasiarek\DashboardKitScheduler\Clock;
+use rafalmasiarek\DashboardKitScheduler\Output\CronOutputBuilder;
 use rafalmasiarek\DashboardKitScheduler\Scheduler;
 
 /**
@@ -66,6 +67,7 @@ final class RunHandler
 
             $taskId = isset($q['task']) ? \trim((string) $q['task']) : '';
             $force  = $this->qBool($q, 'force') ?? false;
+            $options = ['verbose' => $q['verbose'] ?? false];
 
             // -----------------------------------------------------------------
             // Single task mode: /cron?task=<id>
@@ -77,7 +79,8 @@ final class RunHandler
                     $taskId,
                     $force,
                     $passthrough,
-                    $passQs
+                    $passQs,
+                    $options
                 );
             }
 
@@ -128,6 +131,7 @@ final class RunHandler
      * @param bool                   $force
      * @param array<string,string>   $passthrough
      * @param string                 $passQs
+     * @param array<string,mixed>    $options Output options (e.g. ['verbose' => true]).
      * @return ResponseInterface
      */
     private function runSingleTask(
@@ -136,7 +140,8 @@ final class RunHandler
         string $taskId,
         bool $force,
         array $passthrough,
-        string $passQs
+        string $passQs,
+        array $options
     ): ResponseInterface {
         $runId  = \bin2hex(\random_bytes(16));
         $ctx    = ['mode' => 'direct', 'run_id' => $runId];
@@ -167,7 +172,8 @@ final class RunHandler
                 $passQs,
                 1,
                 $record,
-                'Cron queue created (queue-init).'
+                'Cron queue created (queue-init).',
+                $options
             );
         }
 
@@ -191,22 +197,15 @@ final class RunHandler
                 $passQs,
                 $nextPart,
                 $record,
-                'Cron queue created (continuation).'
+                'Cron queue created (continuation).',
+                $options
             );
         }
 
-        return JsonResponder::ok($response, 'Cron task executed.', [
-            'task_name' => (string) $record['name'],
-            'task'      => [
-                'status'      => $record['status'],
-                'started_at'  => $record['started_at'],
-                'finished_at' => $record['finished_at'],
-                'duration_ms' => $record['duration_ms'],
-                'error'       => $record['error'],
-            ],
-            'result'  => $record['result'],
-            'forced'  => $force,
-        ]);
+        return JsonResponder::ok($response, 'Cron task executed.', \array_replace(
+            CronOutputBuilder::build((string) $record['name'], 'direct', [$record], null, $options),
+            ['forced' => $force]
+        ));
     }
 
     /**
@@ -221,6 +220,7 @@ final class RunHandler
      * @param int                     $firstPart
      * @param array<string,mixed>     $initialRecord
      * @param string                  $message
+     * @param array<string,mixed>     $options Output options (e.g. ['verbose' => true]).
      * @return ResponseInterface
      */
     private function createQueue(
@@ -232,7 +232,8 @@ final class RunHandler
         string $passQs,
         int $firstPart,
         array $initialRecord,
-        string $message
+        string $message,
+        array $options
     ): ResponseInterface {
         $queueId    = \bin2hex(\random_bytes(16));
         $queueToken = \bin2hex(\random_bytes(16));
@@ -259,17 +260,13 @@ final class RunHandler
             'task_count'        => \count($queue['tasks']),
             'next'              => $nextUrl,
             'passthrough_query' => $passthrough,
-            'initial'           => [
-                'task_name' => (string) $initialRecord['name'],
-                'task'      => [
-                    'status'      => $initialRecord['status'],
-                    'started_at'  => $initialRecord['started_at'],
-                    'finished_at' => $initialRecord['finished_at'],
-                    'duration_ms' => $initialRecord['duration_ms'],
-                    'error'       => $initialRecord['error'],
-                ],
-                'result' => $initialRecord['result'],
-            ],
+            'initial'           => CronOutputBuilder::build(
+                (string) $initialRecord['name'],
+                'direct',
+                [$initialRecord],
+                null,
+                $options
+            ),
         ]);
 
         return $response->withHeader('Location', $nextUrl)->withStatus(303);

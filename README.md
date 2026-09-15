@@ -55,6 +55,40 @@ Trigger from a system cron:
 * * * * * curl -s -H "Authorization: Bearer $TOKEN" https://example.com/scheduler/run
 ```
 
+## Response format
+
+`GET /scheduler/run` and `GET /scheduler/job` return the same normalized shape whether the task ran directly or through a queue:
+
+```json
+{
+  "task_name": "my_module.my_task",
+  "mode": "queue",
+  "queue": { "id": "...", "index": 0, "part": 1 },
+  "task": {
+    "status": "ok",
+    "started_at": "...",
+    "finished_at": "...",
+    "duration_ms": 350,
+    "error": null
+  },
+  "result": {
+    "final": { "records_processed": 42 }
+  }
+}
+```
+
+`result.final` is the task's own return value from its last run — never dropped, even when the task completed through several queued parts. Pass `?verbose=1` (or `true`/`yes`/`on`) to also get `result.steps`, one entry per run with its own `started_at`/`finished_at`/`duration_ms`/`status`/`result`/`error`.
+
+By default every task uses `Output\DefaultOutputPolicy`. Register a task-specific policy to customize what `result.final`/`result.steps` contain:
+
+```php
+use rafalmasiarek\DashboardKitScheduler\Output\OutputPolicyResolver;
+
+OutputPolicyResolver::register('my_module.my_task', MyTaskOutputPolicy::class);
+```
+
+A custom policy implements `OutputPolicyInterface::buildResult(string $taskName, array $runs, array $options): array`, or extends `AbstractOutputPolicy` and only implements `buildStep(array $run): array` to reuse the default `final`/`steps` structure.
+
 ## Module schedule format
 
 Add a `schedule` key to any module's `module.php`:
