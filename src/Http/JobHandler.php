@@ -7,6 +7,7 @@ namespace rafalmasiarek\DashboardKitScheduler\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use rafalmasiarek\DashboardKitScheduler\Clock;
+use rafalmasiarek\DashboardKitScheduler\Output\CronOutputBuilder;
 use rafalmasiarek\DashboardKitScheduler\Scheduler;
 
 /**
@@ -145,6 +146,9 @@ final class JobHandler
         $queue['tasks'][$index]['last_run_result'] = $record['result'];
         $queue['tasks'][$index]['current_part']    = $part;
 
+        $runs    = $queue['tasks'][$index]['runs'];
+        $options = ['verbose' => $passthrough['verbose'] ?? false];
+
         $result    = $record['result'] ?? null;
         $isStepJob = \is_array($result);
         $isDone    = true;
@@ -176,14 +180,10 @@ final class JobHandler
                 . '&qt=' . \urlencode($token)
                 . $passQs;
 
-            $runs = $queue['tasks'][$index]['runs'];
-
-            $response = JsonResponder::ok($response, 'Cron task step executed, continuing with next part.', [
-                'task_name' => $name,
-                'task'      => $this->buildTaskSummary($record),
-                'next'      => $nextUrl,
-                'queue'     => ['id' => $queueId, 'index' => $index, 'part' => $part],
-            ]);
+            $response = JsonResponder::ok($response, 'Cron task step executed, continuing with next part.', \array_replace(
+                CronOutputBuilder::build($name, 'queue', $runs, ['id' => $queueId, 'index' => $index, 'part' => $part], $options),
+                ['next' => $nextUrl]
+            ));
 
             return $response->withHeader('Location', $nextUrl)->withStatus(303);
         } else {
@@ -210,12 +210,10 @@ final class JobHandler
                 . '&qt=' . \urlencode($token)
                 . $passQs;
 
-            $response = JsonResponder::ok($response, 'Cron task executed, continuing with next task.', [
-                'task_name' => $name,
-                'task'      => $this->buildTaskSummary($record),
-                'next'      => $nextUrl,
-                'queue'     => ['id' => $queueId, 'index' => $nextIndex, 'part' => $part],
-            ]);
+            $response = JsonResponder::ok($response, 'Cron task executed, continuing with next task.', \array_replace(
+                CronOutputBuilder::build($name, 'queue', $runs, ['id' => $queueId, 'index' => $nextIndex, 'part' => $part], $options),
+                ['next' => $nextUrl]
+            ));
 
             return $response->withHeader('Location', $nextUrl)->withStatus(303);
         }
@@ -224,28 +222,9 @@ final class JobHandler
         $queue['finished_at'] = $this->clock->now()->format(\DATE_ATOM);
         $this->queueManager->save($queue);
 
-        return JsonResponder::ok($response, 'Cron queue completed.', [
-            'task_name'    => $name,
-            'task'         => $this->buildTaskSummary($record),
-            'queue_status' => 'completed',
-            'queue'        => ['id' => $queueId, 'index' => $index, 'part' => $part],
-        ]);
-    }
-
-    /**
-     * Build a concise task summary from a runTask() record.
-     *
-     * @param array<string,mixed> $record
-     * @return array<string,mixed>
-     */
-    private function buildTaskSummary(array $record): array
-    {
-        return [
-            'status'      => $record['status'],
-            'started_at'  => $record['started_at'],
-            'finished_at' => $record['finished_at'],
-            'duration_ms' => $record['duration_ms'],
-            'error'       => $record['error'],
-        ];
+        return JsonResponder::ok($response, 'Cron queue completed.', \array_replace(
+            CronOutputBuilder::build($name, 'queue', $runs, ['id' => $queueId, 'index' => $index, 'part' => $part], $options),
+            ['queue_status' => 'completed']
+        ));
     }
 }
