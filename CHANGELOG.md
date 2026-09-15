@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.0.1...v1.1.0) (2026-09-15)
+
+
+### Features
+
+* add OutputPolicyInterface for normalized, standardized task results ([95a7b11](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/commit/95a7b11ae97d71172389e33d6c72ea75180bda0f))
+* add OutputPolicyInterface for normalized, standardized task results ([52055d5](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/commit/52055d5fcc1d5bd75341e0117f3ec56a50791912))
+
 ## [1.0.1](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.0.0...v1.0.1) (2026-09-13)
 
 
