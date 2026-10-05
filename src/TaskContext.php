@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitScheduler;
 
+use rafalmasiarek\DashboardKit\Util\ClockInterface;
+
 /**
  * Object wrapper passed into task callbacks.
  *
@@ -13,7 +15,7 @@ namespace rafalmasiarek\DashboardKitScheduler;
  * - $context->opt       — final merged options (single source of truth)
  * - $context->state     — scheduler state store (last_run, etc.)
  * - $context->payload   — per-queue payload (persisted when queue_state_path present)
- * - $context->clock     — shared Clock instance
+ * - $context->clock     — shared clock instance
  *
  * @package rafalmasiarek\DashboardKitScheduler
  */
@@ -47,9 +49,9 @@ final class TaskContext
     public QueuePayload $payload;
 
     /**
-     * @var Clock
+     * @var ClockInterface
      */
-    public Clock $clock;
+    public ClockInterface $clock;
 
     /**
      * @param string              $taskName
@@ -57,7 +59,7 @@ final class TaskContext
      * @param array<string,mixed> $opt
      * @param SchedulerStateStore $state
      * @param QueuePayload        $payload
-     * @param Clock               $clock
+     * @param ClockInterface      $clock
      */
     public function __construct(
         string $taskName,
@@ -65,7 +67,7 @@ final class TaskContext
         array $opt,
         SchedulerStateStore $state,
         QueuePayload $payload,
-        Clock $clock
+        ClockInterface $clock
     ) {
         $this->taskName = $taskName;
         $this->data     = $data;
