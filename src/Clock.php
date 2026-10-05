@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitScheduler;
 
+use Psr\Clock\ClockInterface;
+
 /**
  * Timezone-aware time utility for all scheduler operations.
  *
@@ -12,9 +14,15 @@ namespace rafalmasiarek\DashboardKitScheduler;
  *  2) PHP default timezone (php.ini / date_default_timezone_set)
  *  3) $fallbackTzId (default: UTC)
  *
+ * Implements the minimal PSR-20 ClockInterface for interop (now() already
+ * matched its signature) — the richer methods below (formatSqlUtc(),
+ * formatMinuteKey(), tzId(), etc.) are scheduler-specific and go beyond
+ * what PSR-20 defines, so this concrete class stays the type-hint
+ * throughout the scheduler rather than the bare interface.
+ *
  * @package rafalmasiarek\DashboardKitScheduler
  */
-final class Clock
+final class Clock implements ClockInterface
 {
     /**
      * @var string
