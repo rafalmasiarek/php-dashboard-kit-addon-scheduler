@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace rafalmasiarek\DashboardKitScheduler\Task;
 
 use Psr\Container\ContainerInterface;
-use rafalmasiarek\DashboardKit\Util\ClockInterface;
+use rafalmasiarek\DashboardKit\Utils\ClockInterface;
 
 /**
  * Builds a task callback from a task definition.

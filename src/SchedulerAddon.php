@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use rafalmasiarek\DashboardKit\Module\ModuleRegistry;
-use rafalmasiarek\DashboardKit\Util\ClockInterface;
+use rafalmasiarek\DashboardKit\Utils\ClockInterface;
 use rafalmasiarek\DashboardKitScheduler\Http\JobHandler;
 use rafalmasiarek\DashboardKitScheduler\Http\JsonResponder;
 use rafalmasiarek\DashboardKitScheduler\Http\QueueManager;

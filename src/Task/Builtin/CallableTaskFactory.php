@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace rafalmasiarek\DashboardKitScheduler\Task\Builtin;
 
 use Psr\Container\ContainerInterface;
-use rafalmasiarek\DashboardKit\Util\ClockInterface;
+use rafalmasiarek\DashboardKit\Utils\ClockInterface;
 use rafalmasiarek\DashboardKitScheduler\Task\TaskFactoryInterface;
 use rafalmasiarek\DashboardKitScheduler\TaskContext;
 

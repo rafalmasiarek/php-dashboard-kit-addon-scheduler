@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace rafalmasiarek\DashboardKitScheduler;
 
 use Cron\CronExpression;
-use rafalmasiarek\DashboardKit\Util\ClockInterface;
-use rafalmasiarek\DashboardKit\Util\TimezoneClock;
+use rafalmasiarek\DashboardKit\Utils\ClockInterface;
+use rafalmasiarek\DashboardKit\Utils\TimezoneClock;
 use rafalmasiarek\DashboardKitScheduler\Exception\TaskLockedException;
 use rafalmasiarek\DashboardKitScheduler\Middleware\FileLockMiddleware;
 
