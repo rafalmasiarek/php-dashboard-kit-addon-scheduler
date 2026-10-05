@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitScheduler\Middleware;
 
-use rafalmasiarek\DashboardKit\Util\ClockInterface;
+use rafalmasiarek\DashboardKit\Utils\ClockInterface;
 use rafalmasiarek\DashboardKitScheduler\Exception\TaskLockedException;
 use rafalmasiarek\DashboardKitScheduler\Lock\ProcessFileLock;
 use rafalmasiarek\DashboardKitScheduler\TaskMiddlewareInterface;

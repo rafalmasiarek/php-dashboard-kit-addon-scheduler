@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitScheduler\Http;
 
-use rafalmasiarek\DashboardKit\Util\ClockInterface;
+use rafalmasiarek\DashboardKit\Utils\ClockInterface;
 
 /**
  * Manages cron queue files used by the queue+redirect anti-timeout mechanism.

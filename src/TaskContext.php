@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitScheduler;
 
-use rafalmasiarek\DashboardKit\Util\ClockInterface;
+use rafalmasiarek\DashboardKit\Utils\ClockInterface;
 
 /**
  * Object wrapper passed into task callbacks.

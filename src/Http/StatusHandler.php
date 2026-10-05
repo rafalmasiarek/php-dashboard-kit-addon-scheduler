@@ -6,7 +6,7 @@ namespace rafalmasiarek\DashboardKitScheduler\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use rafalmasiarek\DashboardKit\Util\ClockInterface;
+use rafalmasiarek\DashboardKit\Utils\ClockInterface;
 use rafalmasiarek\DashboardKitScheduler\Scheduler;
 
 /**

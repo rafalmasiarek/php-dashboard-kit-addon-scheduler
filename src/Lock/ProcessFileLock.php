@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitScheduler\Lock;
 
-use rafalmasiarek\DashboardKit\Util\ClockInterface;
+use rafalmasiarek\DashboardKit\Utils\ClockInterface;
 
 /**
  * Single-file process lock using flock(LOCK_EX|LOCK_NB).
