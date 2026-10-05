@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitScheduler\Lock;
 
-use rafalmasiarek\DashboardKitScheduler\Clock;
+use rafalmasiarek\DashboardKit\Util\ClockInterface;
 
 /**
  * Single-file process lock using flock(LOCK_EX|LOCK_NB).
@@ -26,9 +26,9 @@ final class ProcessFileLock
     private string $lockPath;
 
     /**
-     * @var Clock|null
+     * @var ClockInterface|null
      */
-    private ?Clock $clock;
+    private ?ClockInterface $clock;
 
     /**
      * @var resource|null
@@ -47,9 +47,9 @@ final class ProcessFileLock
 
     /**
      * @param string     $lockPath Absolute path to the lock file.
-     * @param Clock|null $clock    Optional Clock for lock metadata timestamps.
+     * @param ClockInterface|null $clock    Optional clock for lock metadata timestamps.
      */
-    public function __construct(string $lockPath, ?Clock $clock = null)
+    public function __construct(string $lockPath, ?ClockInterface $clock = null)
     {
         $this->lockPath = $lockPath;
         $this->clock    = $clock;

@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use rafalmasiarek\DashboardKit\Module\ModuleRegistry;
+use rafalmasiarek\DashboardKit\Util\ClockInterface;
 use rafalmasiarek\DashboardKitScheduler\Http\JobHandler;
 use rafalmasiarek\DashboardKitScheduler\Http\JsonResponder;
 use rafalmasiarek\DashboardKitScheduler\Http\QueueManager;
@@ -49,7 +50,6 @@ final class SchedulerAddon
         $nativeEndpoint  = (bool) ($schedulerCfg['endpoint'] ?? true);
         $exposeRun       = (bool) ($schedulerCfg['expose_run'] ?? true);
         $token           = (string) ($schedulerCfg['token'] ?? \getenv('SCHEDULER_TOKEN') ?? '');
-        $timezone        = (string) ($appConfig['app']['timezone'] ?? '');
 
         $rootDir = $container->has('app.root_dir')
             ? (string) $container->get('app.root_dir')
@@ -57,13 +57,13 @@ final class SchedulerAddon
 
         $storageDir = $rootDir . '/storage';
 
-        $container->set(Scheduler::class, static function () use ($container, $storageDir, $appConfig, $timezone): Scheduler {
+        $container->set(Scheduler::class, static function () use ($container, $storageDir, $appConfig): Scheduler {
             $systemLogger = $container->has('logger.system')
                 ? $container->get('logger.system')
                 : null;
 
             $store = new PdoStateStore($container->get(\PDO::class), null, $systemLogger);
-            $clock = new Clock($timezone);
+            $clock = $container->get(ClockInterface::class);
 
             $sysMonitoring  = $systemLogger !== null ? new SystemLogMonitoring($systemLogger) : null;
             $userMonitoring = $container->has(MonitoringInterface::class)
@@ -103,16 +103,16 @@ final class SchedulerAddon
 
         $group = $prefix !== '' ? $prefix : '';
 
-        $app->group($group, function (\Slim\Routing\RouteCollectorProxy $g) use ($container, $token, $exposeRun, $timezone): void {
+        $app->group($group, function (\Slim\Routing\RouteCollectorProxy $g) use ($container, $token, $exposeRun): void {
             // ------------------------------------------------------------------
             // GET /scheduler/status — public
             // ------------------------------------------------------------------
             $g->get('/scheduler/status', function (
                 ServerRequestInterface $request,
                 ResponseInterface $response
-            ) use ($container, $timezone): ResponseInterface {
+            ) use ($container): ResponseInterface {
                 $scheduler = $container->get(Scheduler::class);
-                $clock     = new Clock($timezone);
+                $clock     = $container->get(ClockInterface::class);
                 $handler   = new StatusHandler($scheduler, $clock);
                 return $handler($request, $response);
             });
@@ -124,7 +124,7 @@ final class SchedulerAddon
                 $g->get('/scheduler/run', function (
                     ServerRequestInterface $request,
                     ResponseInterface $response
-                ) use ($container, $token, $timezone): ResponseInterface {
+                ) use ($container, $token): ResponseInterface {
                     $provided = '';
                     $auth     = $request->getHeaderLine('Authorization');
                     if (\str_starts_with($auth, 'Bearer ')) {
@@ -140,7 +140,7 @@ final class SchedulerAddon
 
                     $scheduler    = $container->get(Scheduler::class);
                     $queueManager = $container->get(QueueManager::class);
-                    $clock        = new Clock($timezone);
+                    $clock        = $container->get(ClockInterface::class);
                     $handler      = new RunHandler($scheduler, $clock, $queueManager);
                     return $handler($request, $response);
                 });
@@ -152,10 +152,10 @@ final class SchedulerAddon
             $g->get('/scheduler/job', function (
                 ServerRequestInterface $request,
                 ResponseInterface $response
-            ) use ($container, $timezone): ResponseInterface {
+            ) use ($container): ResponseInterface {
                 $scheduler    = $container->get(Scheduler::class);
                 $queueManager = $container->get(QueueManager::class);
-                $clock        = new Clock($timezone);
+                $clock        = $container->get(ClockInterface::class);
                 $handler      = new JobHandler($scheduler, $clock, $queueManager);
                 return $handler($request, $response);
             });
@@ -187,7 +187,7 @@ final class SchedulerAddon
      * @param Scheduler            $scheduler
      * @param array<string,mixed>  $appConfig
      * @param ContainerInterface   $container
-     * @param Clock                $clock
+     * @param ClockInterface      $clock
      * @param LoggerInterface|null $logger
      * @return void
      */
@@ -195,7 +195,7 @@ final class SchedulerAddon
         Scheduler $scheduler,
         array $appConfig,
         ContainerInterface $container,
-        Clock $clock,
+        ClockInterface $clock,
         ?LoggerInterface $logger = null
     ): void {
         $tasks = (array) ($appConfig['cron'] ?? []);
@@ -255,7 +255,7 @@ final class SchedulerAddon
      * @param Scheduler            $scheduler
      * @param ModuleRegistry       $registry
      * @param ContainerInterface   $container
-     * @param Clock                $clock
+     * @param ClockInterface      $clock
      * @param LoggerInterface|null $logger   Optional logger for config errors and load summary.
      * @return void
      */
@@ -263,7 +263,7 @@ final class SchedulerAddon
         Scheduler $scheduler,
         ModuleRegistry $registry,
         ContainerInterface $container,
-        Clock $clock,
+        ClockInterface $clock,
         ?LoggerInterface $logger = null
     ): void {
         $taskRegistry = self::buildTaskRegistry();

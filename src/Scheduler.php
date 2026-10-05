@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace rafalmasiarek\DashboardKitScheduler;
 
 use Cron\CronExpression;
+use rafalmasiarek\DashboardKit\Util\ClockInterface;
+use rafalmasiarek\DashboardKit\Util\TimezoneClock;
 use rafalmasiarek\DashboardKitScheduler\Exception\TaskLockedException;
 use rafalmasiarek\DashboardKitScheduler\Middleware\FileLockMiddleware;
 
@@ -66,9 +68,9 @@ class Scheduler
     /**
      * Shared time source.
      *
-     * @var Clock
+     * @var ClockInterface
      */
-    private Clock $clock;
+    private ClockInterface $clock;
 
     /**
      * Status used when a task is skipped due to a lock.
@@ -83,9 +85,9 @@ class Scheduler
      *
      * @param SchedulerStateStore|null $store            Pluggable state store.
      * @param string|null              $runtimeDir       Path for the default FileStateStore.
-     * @param mixed                    $timezone         Timezone ID string or DateTimeZone.
+     * @param mixed                    $timezone         Deprecated, ignored — pass $clock instead.
      * @param MonitoringInterface|null $monitoring       Monitoring implementation (default: NoopMonitoring).
-     * @param Clock|null               $clock            Shared time source.
+     * @param ClockInterface|null      $clock            Shared time source.
      * @param string|null              $locksDir         Directory for lock files.
      * @param bool                     $defaultNoOverlap Whether tasks are non-overlapping by default.
      */
@@ -94,7 +96,7 @@ class Scheduler
         ?string $runtimeDir = null,
         mixed $timezone = null,
         ?MonitoringInterface $monitoring = null,
-        ?Clock $clock = null,
+        ?ClockInterface $clock = null,
         ?string $locksDir = null,
         bool $defaultNoOverlap = true
     ) {
@@ -105,14 +107,7 @@ class Scheduler
             $this->store = new FileStateStore($runtimeDir);
         }
 
-        $tzId = '';
-        if (\is_string($timezone)) {
-            $tzId = \trim($timezone);
-        } elseif ($timezone instanceof \DateTimeZone) {
-            $tzId = $timezone->getName();
-        }
-
-        $this->clock = $clock instanceof Clock ? $clock : new Clock($tzId, 'UTC');
+        $this->clock = $clock ?? new TimezoneClock();
 
         $this->monitoring       = $monitoring ?? new NoopMonitoring();
         $this->defaultNoOverlap = $defaultNoOverlap;

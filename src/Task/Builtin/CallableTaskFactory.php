@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace rafalmasiarek\DashboardKitScheduler\Task\Builtin;
 
 use Psr\Container\ContainerInterface;
-use rafalmasiarek\DashboardKitScheduler\Clock;
+use rafalmasiarek\DashboardKit\Util\ClockInterface;
 use rafalmasiarek\DashboardKitScheduler\Task\TaskFactoryInterface;
 use rafalmasiarek\DashboardKitScheduler\TaskContext;
 
@@ -22,7 +22,7 @@ final class CallableTaskFactory implements TaskFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function build(string $taskId, ContainerInterface $container, Clock $clock, array $options): callable
+    public function build(string $taskId, ContainerInterface $container, ClockInterface $clock, array $options): callable
     {
         return function (TaskContext $context) use ($taskId, $container): mixed {
             /** @var array<string,mixed> $opt */
