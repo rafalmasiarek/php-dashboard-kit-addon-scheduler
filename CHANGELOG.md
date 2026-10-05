@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.2.1...v1.2.2) (2026-10-05)
+
+
+### Bug Fixes
+
+* **clock:** follow dashboard-kit's Util to Utils namespace move ([#12](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/issues/12)) ([6ce2048](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/commit/6ce2048ecf753cb0975efa9997bedb0e8e2eb800))
+
 ## [1.2.1](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.2.0...v1.2.1) (2026-10-05)
 
 
