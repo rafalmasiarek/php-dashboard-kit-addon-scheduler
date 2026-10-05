@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.2.0...v1.2.1) (2026-10-05)
+
+
+### Bug Fixes
+
+* **clock:** type-hint TaskContext::$clock as ClockInterface ([#10](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/issues/10)) ([8180d42](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/commit/8180d426d4a4844346dc6338a24a67f0deaaff2b))
+
 ## [1.2.0](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.1.0...v1.2.0) (2026-10-05)
 
 
