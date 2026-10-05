@@ -6,7 +6,7 @@ namespace rafalmasiarek\DashboardKitScheduler\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use rafalmasiarek\DashboardKitScheduler\Clock;
+use rafalmasiarek\DashboardKit\Util\ClockInterface;
 use rafalmasiarek\DashboardKitScheduler\Output\CronOutputBuilder;
 use rafalmasiarek\DashboardKitScheduler\Scheduler;
 
@@ -29,9 +29,9 @@ final class JobHandler
     private Scheduler $scheduler;
 
     /**
-     * @var Clock
+     * @var ClockInterface
      */
-    private Clock $clock;
+    private ClockInterface $clock;
 
     /**
      * @var QueueManager
@@ -40,10 +40,10 @@ final class JobHandler
 
     /**
      * @param Scheduler    $scheduler
-     * @param Clock        $clock
+     * @param ClockInterface        $clock
      * @param QueueManager $queueManager
      */
-    public function __construct(Scheduler $scheduler, Clock $clock, QueueManager $queueManager)
+    public function __construct(Scheduler $scheduler, ClockInterface $clock, QueueManager $queueManager)
     {
         $this->scheduler    = $scheduler;
         $this->clock        = $clock;

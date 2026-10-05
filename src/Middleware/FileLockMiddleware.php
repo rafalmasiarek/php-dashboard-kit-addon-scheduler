@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitScheduler\Middleware;
 
-use rafalmasiarek\DashboardKitScheduler\Clock;
+use rafalmasiarek\DashboardKit\Util\ClockInterface;
 use rafalmasiarek\DashboardKitScheduler\Exception\TaskLockedException;
 use rafalmasiarek\DashboardKitScheduler\Lock\ProcessFileLock;
 use rafalmasiarek\DashboardKitScheduler\TaskMiddlewareInterface;
@@ -27,16 +27,16 @@ final class FileLockMiddleware implements TaskMiddlewareInterface
     private string $locksDir;
 
     /**
-     * @var Clock|null
+     * @var ClockInterface|null
      */
-    private ?Clock $clock;
+    private ?ClockInterface $clock;
 
     /**
      * @param string     $locksDir Directory for lock files (absolute path).
-     * @param Clock|null $clock    Optional Clock used for lock metadata timestamps.
+     * @param ClockInterface|null $clock    Optional clock used for lock metadata timestamps.
      * @throws \RuntimeException When $locksDir is empty.
      */
-    public function __construct(string $locksDir, ?Clock $clock = null)
+    public function __construct(string $locksDir, ?ClockInterface $clock = null)
     {
         $locksDir = \rtrim($locksDir, '/');
         if ($locksDir === '') {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace rafalmasiarek\DashboardKitScheduler\Http;
 
-use rafalmasiarek\DashboardKitScheduler\Clock;
+use rafalmasiarek\DashboardKit\Util\ClockInterface;
 
 /**
  * Manages cron queue files used by the queue+redirect anti-timeout mechanism.
@@ -62,7 +62,7 @@ final class QueueManager
      * @param string               $secret
      * @param string[]             $tasks
      * @param array<string,string> $passthroughQuery
-     * @param Clock                $clock
+     * @param ClockInterface                $clock
      * @param array<string,string> $runIdsByTask Optional run_id per task name.
      * @return array<string,mixed>
      */
@@ -71,7 +71,7 @@ final class QueueManager
         string $secret,
         array $tasks,
         array $passthroughQuery,
-        Clock $clock,
+        ClockInterface $clock,
         array $runIdsByTask = []
     ): array {
         $queue = [
