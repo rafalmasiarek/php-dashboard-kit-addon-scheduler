@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.1.0...v1.2.0) (2026-10-05)
+
+
+### Features
+
+* **model:** migrate PdoStateStore CRUD onto dashboard-kit's Model ([#7](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/issues/7)) ([63c6cc5](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/commit/63c6cc5c8d4a765070e36c2c9deb0cc9b549739c))
+
 ## [1.1.0](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.0.1...v1.1.0) (2026-09-15)
 
 
