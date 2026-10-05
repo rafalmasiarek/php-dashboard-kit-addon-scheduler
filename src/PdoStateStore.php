@@ -6,6 +6,7 @@ namespace rafalmasiarek\DashboardKitScheduler;
 
 use PDO;
 use Psr\Log\LoggerInterface;
+use rafalmasiarek\DashboardKit\Model\Model;
 
 /**
  * PDO-based implementation of SchedulerStateStore.
@@ -52,13 +53,8 @@ final class PdoStateStore implements SchedulerStateStore
      */
     public function read(string $key): ?string
     {
-        $stmt = $this->pdo->prepare(
-            "SELECT value FROM {$this->table} WHERE `key` = :k LIMIT 1"
-        );
-        $stmt->execute([':k' => $key]);
-        $val = $stmt->fetchColumn();
-
-        return $val === false ? null : (string) $val;
+        $row = Model::on($this->table)->select('value')->where('key', $key)->first();
+        return $row !== null ? (string) $row['value'] : null;
     }
 
     /**
@@ -66,20 +62,7 @@ final class PdoStateStore implements SchedulerStateStore
      */
     public function write(string $key, string $value): void
     {
-        $driver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
-
-        if ($driver === 'sqlite' || $driver === 'pgsql') {
-            $sql = "INSERT INTO {$this->table} (`key`, value)
-                    VALUES (:k, :v)
-                    ON CONFLICT(`key`) DO UPDATE SET value = excluded.value";
-        } else {
-            $sql = "INSERT INTO {$this->table} (`key`, value)
-                    VALUES (:k, :v)
-                    ON DUPLICATE KEY UPDATE value = VALUES(value)";
-        }
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':k' => $key, ':v' => $value]);
+        Model::on($this->table)->upsert(['key' => $key, 'value' => $value], ['key']);
     }
 
     /**
@@ -87,10 +70,7 @@ final class PdoStateStore implements SchedulerStateStore
      */
     public function delete(string $key): void
     {
-        $stmt = $this->pdo->prepare(
-            "DELETE FROM {$this->table} WHERE `key` = :k"
-        );
-        $stmt->execute([':k' => $key]);
+        Model::on($this->table)->where('key', $key)->forceDelete();
     }
 
     /**
