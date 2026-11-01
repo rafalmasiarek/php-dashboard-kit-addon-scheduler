@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.3](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.2.2...v1.2.3) (2026-11-01)
+
+
+### Miscellaneous Chores
+
+* **deps:** accept any dashboard-kit &gt;=5.0, not just the current major ([#15](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/issues/15)) ([093741c](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/commit/093741c47db836aef064c4a641d1da079f17245e))
+
 ## [1.2.2](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.2.1...v1.2.2) (2026-10-05)
 
 
