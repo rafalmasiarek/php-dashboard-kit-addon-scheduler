@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.4](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.2.3...v1.2.4) (2026-11-17)
+
+
+### Bug Fixes
+
+* rename includes to footer_includes in README.yml ([#18](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/issues/18)) ([439a2ce](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/commit/439a2ce2dee9ae9a86c81beec0dbb9a467727693))
+
 ## [1.2.3](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/compare/v1.2.2...v1.2.3) (2026-11-01)
 
 
