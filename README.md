@@ -1,12 +1,47 @@
 # dashboard-kit-addon-scheduler
+
+
 [![Packagist Version](https://img.shields.io/packagist/v/rafalmasiarek/dashboard-kit-addon-scheduler)](https://packagist.org/packages/rafalmasiarek/dashboard-kit-addon-scheduler)
 [![Total Downloads](https://img.shields.io/packagist/dt/rafalmasiarek/dashboard-kit-addon-scheduler)](https://packagist.org/packages/rafalmasiarek/dashboard-kit-addon-scheduler)
 [![PHP](https://img.shields.io/packagist/php-v/rafalmasiarek/dashboard-kit-addon-scheduler)](https://packagist.org/packages/rafalmasiarek/dashboard-kit-addon-scheduler)
 [![License](https://img.shields.io/badge/license-BUSL--1.1-red)](https://github.com/rafalmasiarek/php-dashboard-kit-addon-scheduler/blob/main/LICENSE)
 
+
+
+
+
+
+
 Cron-expression task scheduler addon for [rafalmasiarek/dashboard-kit](https://github.com/rafalmasiarek/php-dashboard-kit).
 
 Auto-discovers tasks from module `schedule` definitions. Runs tasks via HTTP endpoints with a queue+redirect mechanism to avoid PHP execution timeouts on long-running jobs.
+
+
+
+
+
+
+
+## License
+
+![License: BUSL-1.1](https://img.shields.io/badge/license-BUSL--1.1-red)
+
+Business Source License 1.1.
+
+Source available; commercial use restricted until 2099-01-01.
+
+
+
+
+See [LICENSE](LICENSE) for full details.
+
+For alternative licensing, [contact us](https://masiarek.pl/contact/?af_subject=Commercial+license+%E2%80%94+dashboard-kit-addon-scheduler&af_message=Hello%2C+I+am+interested+in+a+commercial+license+for+dashboard-kit-addon-scheduler.).
+
+
+
+## Authors
+
+- Rafał Masiarek | [website](https://masiarek.pl) | [github](https://github.com/rafalmasiarek)
 
 
 
@@ -3193,24 +3228,6 @@ Handle task execution step.
 </details>
 
 
-
-## License
-
-![License: BUSL-1.1](https://img.shields.io/badge/license-BUSL--1.1-red)
-
-Business Source License 1.1.
-
-Source available; commercial use restricted until 2099-01-01.
-
-
-For alternative licensing, contact: https://masiarek.pl/contact/?af_subject=Commercial+license+%E2%80%94+dashboard-kit-addon-scheduler&af_message=Hello%2C+I+am+interested+in+a+commercial+license+for+dashboard-kit-addon-scheduler.
-
-
-
-See [LICENSE](LICENSE) for full details.
-## Authors
-
-- Rafał Masiarek | [website](https://masiarek.pl) | [github](https://github.com/rafalmasiarek)
 
 
 <!-- references -->
