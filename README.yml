@@ -25,7 +25,7 @@ context:
 
     Auto-discovers tasks from module `schedule` definitions. Runs tasks via HTTP endpoints with a queue+redirect mechanism to avoid PHP execution timeouts on long-running jobs.
 
-includes:
+footer_includes:
   - docs/usage.md
   - docs/schedule.md
   - docs/api.md
